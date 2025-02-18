@@ -2,6 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { QRCodeCanvas } from "qrcode.react";
 import bcrypt from "bcryptjs";
 
 export default function HomePage() {
@@ -32,8 +33,16 @@ export default function HomePage() {
   }, [user]);
 
   if (!isSignedIn) {
-    return <div>Sign in to view this page</div>;
+    return<div>Sign in to view this page</div>;
   }
 
-  return <div>{loading ? "Syncing user..." : `Welcome, ${user?.firstName}!`}</div>;
+  return (
+      <>
+        <div>
+          {loading ? "Syncing user..." : `Welcome, ${user?.firstName}!`}
+        </div>
+        {user?.id && <QRCodeCanvas value={`fest-ticket:${user.id}`} size={200} />}
+      </>
+
+  );
 }
