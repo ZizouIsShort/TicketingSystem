@@ -33,16 +33,20 @@ export default function HomePage() {
   }, [user]);
 
   if (!isSignedIn) {
-    return<div>Sign in to view this page</div>;
+    return <div className="text-center text-red-500 mt-10">Sign in to view this page</div>;
   }
 
   return (
-      <>
-        <div>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Event Name</h1>
+        <div className="text-2xl text-gray-800 mb-4">
           {loading ? "Syncing user..." : `Welcome, ${user?.firstName}!`}
         </div>
-        {user?.id && <QRCodeCanvas value={`fest-ticket:${user.id}`} size={200} />}
-      </>
-
+        {user?.id && (
+            <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
+              <QRCodeCanvas value={`fest-ticket:${user.id}`} size={200} />
+            </div>
+        )}
+      </div>
   );
 }
