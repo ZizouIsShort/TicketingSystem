@@ -36,7 +36,7 @@ export default function HomePage() {
   if (!isSignedIn) {
     return <div className="text-center text-red-500 mt-10">Sign in to view this page</div>;
   }
-  
+
 
   return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
