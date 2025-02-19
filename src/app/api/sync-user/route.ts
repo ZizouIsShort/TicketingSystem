@@ -8,7 +8,7 @@ const supabase = createClient(
 
 export async function POST(req: Request) {
     try {
-        const { id, email, name, password } = await req.json();
+        const { id, email, name, password, role } = await req.json();
 
         if (!id || !email) {
             return NextResponse.json({ error: "Missing fields" });
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         if (!existingUser) {
             const { error: insertError } = await supabase
                 .from("uzer")
-                .insert([{ id, email, name, password }]);
+                .insert([{ id, email, name, password, role }]);
 
             if (insertError) {
                 console.error("Insert Error:", insertError);
