@@ -4,6 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import bcrypt from "bcryptjs";
+import Scanner from "../components/scanner";
 
 export default function HomePage() {
   const { user, isSignedIn } = useUser();
@@ -35,6 +36,7 @@ export default function HomePage() {
   if (!isSignedIn) {
     return <div className="text-center text-red-500 mt-10">Sign in to view this page</div>;
   }
+  
 
   return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -47,6 +49,7 @@ export default function HomePage() {
               <QRCodeCanvas value={`fest-ticket:${user.id}`} size={200} />
             </div>
         )}
+        <Scanner/>
       </div>
   );
 }
