@@ -15,9 +15,11 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.0",
     "next": "15.1.7",
+    "qr-scanner": "^1.4.2",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
