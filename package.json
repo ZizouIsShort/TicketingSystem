@@ -17,11 +17,8 @@
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.0",
     "next": "15.1.7",
-<<<<<<< Updated upstream
     "qr-scanner": "^1.4.2",
-=======
     "postgres": "^3.4.5",
->>>>>>> Stashed changes
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -4,7 +4,6 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import bcrypt from "bcryptjs";
-import Scanner from "../components/scanner";
 
 export default function HomePage() {
     const { user, isSignedIn } = useUser();
@@ -20,6 +19,7 @@ export default function HomePage() {
         if (user && user?.publicMetadata?.role !== 'admin') {
             const email = user.primaryEmailAddress?.emailAddress || "";
 
+            // Generate a hashed password using bcryptjs
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(email, salt);
 
@@ -51,11 +51,11 @@ export default function HomePage() {
                     } else {
                         setStudentExists(false);
                     }
-                    setLoading(false);
+                    setLoading(false); // ✅ Fix: Ensure loading is false after processing
                 })
                 .catch((error) => {
                     console.error("Error:", error);
-                    setLoading(false);
+                    setLoading(false); // ✅ Fix: Ensure loading is false even on error
                 });
         } else if (user && user?.publicMetadata?.role === 'admin') {
             const email = user.primaryEmailAddress?.emailAddress || "";
@@ -89,17 +89,17 @@ export default function HomePage() {
                     })
                         .then((res) => res.json())
                         .then((adminData) => {
-                            console.log("Admin Details Response:", adminData);
-                            setLoading(false);
+                            console.log("Admin Details Response:", adminData); // Optional debugging
+                            setLoading(false); // ✅ Fix: Ensure loading is false after admin sync
                         })
                         .catch((error) => {
                             console.error("Error in admin_details:", error);
-                            setLoading(false);
+                            setLoading(false); // ✅ Fix: Ensure loading is false on error
                         });
                 })
                 .catch((error) => {
                     console.error("Error in sync-user:", error);
-                    setLoading(false);
+                    setLoading(false); // ✅ Fix: Ensure loading is false on error
                 });
         }
     }, [user]);
@@ -156,31 +156,6 @@ export default function HomePage() {
         );
     }
 
-<<<<<<< Updated upstream
-  if (!isSignedIn) {
-    return <div className="text-center text-red-500 mt-10">Sign in to view this page</div>;
-  }
-  
-
-
-  if(user?.publicMetadata?.role === 'admin'){
-    return <p>Hello Admin</p>
-  }
-  return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Event Name</h1>
-        <div className="text-2xl text-gray-800 mb-4">
-          {loading ? "Syncing user..." : `Welcome, ${user?.firstName}!`}
-        </div>
-        {user?.id && (
-            <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
-              <QRCodeCanvas value={`fest-ticket:${user.id}`} size={200} />
-            </div>
-        )}
-        <Scanner/>
-      </div>
-  );
-=======
     if (user?.publicMetadata?.role === "admin") {
         return <p>Hello Admin</p>;
     }
@@ -191,5 +166,4 @@ export default function HomePage() {
             {user?.id && <QRCodeCanvas value={`fest-ticket:${user.id}`} size={200} />}
         </>
     );
->>>>>>> Stashed changes
 }
