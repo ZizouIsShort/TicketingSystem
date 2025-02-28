@@ -7,32 +7,6 @@ import bcrypt from "bcryptjs";
 import Scanner from "../components/scanner";
 
 export default function HomePage() {
-  const { user, isSignedIn } = useUser();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (user && user?.publicMetadata?.role !== 'admin') {
-      const email = user.primaryEmailAddress?.emailAddress || "";
-
-      // Generate a hashed password using bcryptjs
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(email, salt); // ✅ Hash the email as the fake password
-
-      console.log(user?.publicMetadata?.role);
-
-      fetch("./api/sync-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: user.id,
-          email: email,
-          name: `${user.firstName} ${user.lastName}`.trim(),
-          password: hash,
-          role: 'user',
-        }),
-      })
-          .then((res) => res.json())
-          .then(() => setLoading(false));
     const { user, isSignedIn } = useUser();
     const [loading, setLoading] = useState(true);
 
@@ -158,28 +132,6 @@ export default function HomePage() {
     if (!isSignedIn) {
         return <div>Sign in to view this page</div>;
     }
-    else if(user && user?.publicMetadata?.role === 'admin'){
-      const email = user.primaryEmailAddress?.emailAddress || "";
-
-      // Generate a hashed password using bcryptjs
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(email, salt); // ✅ Hash the email as the fake password
-
-      console.log(user?.publicMetadata?.role);
-
-      fetch("./api/sync-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: user.id,
-          email: email,
-          name: `${user.firstName} ${user.lastName}`.trim(),
-          password: hash,
-          role: 'admin',
-        }),
-      })
-          .then((res) => res.json())
-          .then(() => setLoading(false));
 
     if (studentExists === false) {
         return (
@@ -203,7 +155,6 @@ export default function HomePage() {
             </>
         );
     }
-  }, [user]);
 
 <<<<<<< Updated upstream
   if (!isSignedIn) {
