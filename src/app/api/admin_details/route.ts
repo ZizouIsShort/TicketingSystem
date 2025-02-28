@@ -8,18 +8,16 @@ const supabase = createClient(
 
 export async function POST(req: Request) {
     try {
-        const { id, email, name, password, role } = await req.json();
-        const { id, email, password, name} = await req.json();
+        const { id, name} = await req.json();
 
-        if (!id || !email) {
+        if (!id || !name) {
             return NextResponse.json({ error: "Missing fields" });
         }
 
         const { data: existingUser, error: fetchError } = await supabase
-            .from("uzer")
-            .from("users")
-            .select("id")
-            .eq("email", email)
+            .from("admin")
+            .select("name")
+            .eq("name", name)
             .single();
 
         if (fetchError && fetchError.code !== "PGRST116") {
@@ -29,10 +27,8 @@ export async function POST(req: Request) {
 
         if (!existingUser) {
             const { error: insertError } = await supabase
-                .from("uzer")
-                .insert([{ id, email, name, password, role }]);
-                .from("users")
-                .insert([{ id, email, password, name }]);
+                .from("admin")
+                .insert([{ id, name }]);
 
             if (insertError) {
                 console.error("Insert Error:", insertError);
