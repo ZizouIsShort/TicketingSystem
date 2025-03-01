@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { sql } from "drizzle-orm";
+import { db } from "@/lib/db";
+import {studentTable} from "@/db/schema";
 
 export async function POST(req: Request) {
     try {
@@ -14,24 +11,18 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing ID" });
         }
 
-        const { data, error } = await supabase
-            .from("student")
-            .select("id")
-            .eq("id", id)
-            .single();
+        //if the student exists using raw SQL
+        const existingUser = await db.execute(
+            sql`SELECT id FROM ${studentTable} WHERE id = ${id} LIMIT 1`
+        );
 
-        if (error && error.code !== "PGRST116") {
-            console.error("Fetch Error:", error);
-            return NextResponse.json({ error: error.message });
-        }
-
-        if (!data) {
+        if (existingUser.length === 0) {
             return NextResponse.json({ exists: false });
         }
 
         return NextResponse.json({ exists: true });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("API Error:", error);
         return NextResponse.json({ error: error.message });
     }

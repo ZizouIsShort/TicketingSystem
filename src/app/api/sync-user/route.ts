@@ -1,46 +1,33 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { sql } from "drizzle-orm";
+import { db } from "@/lib/db";
+import {usersTable} from "@/db/schema";
 
 export async function POST(req: Request) {
     try {
-        const { id, email, password, name} = await req.json();
+        const { id, email, password, name } = await req.json();
 
-        if (!id || !email) {
+        if (!id || !email || !password || !name) {
             return NextResponse.json({ error: "Missing fields" });
         }
 
-        const { data: existingUser, error: fetchError } = await supabase
-            .from("users")
-            .select("id")
-            .eq("email", email)
-            .single();
+        //if the user already exists
+        const existingUser = await db.execute(
+            sql`SELECT id FROM ${usersTable} WHERE email = ${email} LIMIT 1`
+        );
 
-        if (fetchError && fetchError.code !== "PGRST116") {
-            console.error("Fetch Error:", fetchError);
-            throw fetchError;
+        if (existingUser.length > 0) {
+            return NextResponse.json({ message: "User already exists" });
         }
 
-        if (!existingUser) {
-            const { error: insertError } = await supabase
-                .from("users")
-                .insert([{ id, email, password, name }]);
+        //inserting the new user
+        await db.execute(
+            sql`INSERT INTO ${usersTable} (id, email, password, name) VALUES (${id}, ${email}, ${password}, ${name})`
+        );
 
-            if (insertError) {
-                console.error("Insert Error:", insertError);
-                throw insertError;
-            }
+        return NextResponse.json({ message: "User added to database" });
 
-            return NextResponse.json({ message: "User added to Supabase" });
-        }
-
-        return NextResponse.json({ message: "User already exists" });
-
-    } catch (error) {
+    } catch (error: any) {
         console.error("API Error:", error);
         return NextResponse.json({ error: error.message });
     }
