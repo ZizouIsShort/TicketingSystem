@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";// Drizzle database instance
+import { NextResponse } from "next/server";
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import {adminTable} from "@/db/schema";// Ensure this matches your schema file
+import {adminTable} from "@/db/schema";
 
 
 export async function POST(req: Request) {
