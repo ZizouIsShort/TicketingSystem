@@ -2,7 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { QRCodeCanvas } from "qrcode.react";
+import QrCode from "@/components/QrCode";
 import bcrypt from "bcryptjs";
 
 export default function HomePage() {
@@ -12,6 +12,8 @@ export default function HomePage() {
     const [cName, setCName] = useState("");
     const [cStream, setCStream] = useState("");
     const [cYear, setCYear] = useState("");
+    const [eventTitle, setEventTitle] = useState("");
+    const [ticketID, setTicketID] = useState("");
 
     const [studentExists, setStudentExists] = useState<boolean | null>(null);
 
@@ -19,7 +21,6 @@ export default function HomePage() {
         if (user && user?.publicMetadata?.role !== 'admin') {
             const email = user.primaryEmailAddress?.emailAddress || "";
 
-            // Generate a hashed password using bcryptjs
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(email, salt);
 
@@ -31,7 +32,7 @@ export default function HomePage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     id: user.id,
-                    email,
+                    email: email,
                     password: hash,
                     name: `${user.firstName} ${user.lastName}`.trim(),
                 }),
@@ -48,14 +49,18 @@ export default function HomePage() {
                 .then((data) => {
                     if (data.exists) {
                         setStudentExists(true);
+                        setEventTitle("Kreiva X Alfaaz")
+                        const ticket = `${email}${user.id}`.trim();
+                        console.log(ticket)
+                        setTicketID(ticket);
                     } else {
                         setStudentExists(false);
                     }
-                    setLoading(false); // ✅ Fix: Ensure loading is false after processing
+                    setLoading(false);
                 })
                 .catch((error) => {
                     console.error("Error:", error);
-                    setLoading(false); // ✅ Fix: Ensure loading is false even on error
+                    setLoading(false);
                 });
         } else if (user && user?.publicMetadata?.role === 'admin') {
             const email = user.primaryEmailAddress?.emailAddress || "";
@@ -90,16 +95,16 @@ export default function HomePage() {
                         .then((res) => res.json())
                         .then((adminData) => {
                             console.log("Admin Details Response:", adminData); // Optional debugging
-                            setLoading(false); // ✅ Fix: Ensure loading is false after admin sync
+                            setLoading(false);
                         })
                         .catch((error) => {
                             console.error("Error in admin_details:", error);
-                            setLoading(false); // ✅ Fix: Ensure loading is false on error
+                            setLoading(false);
                         });
                 })
                 .catch((error) => {
                     console.error("Error in sync-user:", error);
-                    setLoading(false); // ✅ Fix: Ensure loading is false on error
+                    setLoading(false);
                 });
         }
     }, [user]);
@@ -161,9 +166,9 @@ export default function HomePage() {
     }
 
     return (
-        <>
-            <div>{loading ? "Syncing user..." : `Welcome, ${user?.firstName}!`}</div>
-            {user?.id && <QRCodeCanvas value={`fest-ticket:${user.id}`} size={200} />}
-        </>
+        <div className="flex flex-col items-center justify-center min-h-screen">
+            <h1 className="text-xl font-bold mb-4">Your Event Ticket</h1>
+            {ticketID ? <QrCode eventTitle={eventTitle} id={ticketID}/> : <p>Generating QR Code...</p>}
+        </div>
     );
 }
