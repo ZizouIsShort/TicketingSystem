@@ -4,6 +4,8 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import QrCode from "@/components/QrCode";
 import bcrypt from "bcryptjs";
+import {isThenable} from "next/dist/shared/lib/is-thenable";
+import {error} from "next/dist/build/output/log";
 
 export default function HomePage() {
     const { user, isSignedIn } = useUser();
@@ -39,7 +41,7 @@ export default function HomePage() {
             })
                 .then((res) => res.json())
                 .then(() => {
-                    return fetch("/api/get_student_id", {
+                    return fetch("./api/get_student_id", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ id: user.id }),
@@ -49,10 +51,38 @@ export default function HomePage() {
                 .then((data) => {
                     if (data.exists) {
                         setStudentExists(true);
-                        setEventTitle("Kreiva X Alfaaz")
+                        const eventT = "Kreiva X Alfaaz"
+                        setEventTitle(eventT)
                         const ticket = `${email}${user.id}`.trim();
                         console.log(ticket)
                         setTicketID(ticket);
+                        const formatDate = (date: Date = new Date()): string => {
+                            const day = String(date.getDate()).padStart(2, '0');
+                            const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0
+                            const year = date.getFullYear();
+
+                            return `${day}-${month}-${year}`;
+                        }
+                        const formattedDate: string = formatDate();
+                        console.log(formatDate());
+                        fetch("./api/ticket", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json"},
+                            body: JSON.stringify({
+                                ticketID: ticket,
+                                title: eventT,
+                                uid: user.id,
+                                createdAt: formattedDate,
+                                torf: true,
+                            }),
+                        }).then((res)=> res.json()).then((genTick)=>{
+                            console.log("Ticket Gen response:", genTick);
+                            setLoading(false);
+                        }).catch((error)=>{
+                            console.error("Error in ticket generation:", error)
+                            setLoading(false);
+                        })
+
                     } else {
                         setStudentExists(false);
                     }
@@ -142,16 +172,19 @@ export default function HomePage() {
         return (
             <>
                 <input
+                    className={'bg-black'}
                     placeholder="Enter your college"
                     value={cName}
                     onChange={(e) => setCName(e.target.value)}
                 />
                 <input
+                    className={'bg-black'}
                     placeholder="Enter your stream"
                     value={cStream}
                     onChange={(e) => setCStream(e.target.value)}
                 />
                 <input
+                    className={'bg-black'}
                     placeholder="Enter your year"
                     value={cYear}
                     onChange={(e) => setCYear(e.target.value)}

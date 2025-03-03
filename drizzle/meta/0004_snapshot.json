@@ -1,6 +1,6 @@
 {
-  "id": "c7d806a0-7c2a-4ec4-be21-8a8f0e1d2534",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "044a703c-16e7-44a2-90d3-db69912f22a0",
+  "prevId": "b077c327-1173-4cf2-83fa-c5cb31a48c54",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -161,26 +161,26 @@
           "primaryKey": false,
           "notNull": true
         },
-        "userID": {
-          "name": "userID",
+        "userid": {
+          "name": "userid",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "adminid": {
+          "name": "adminid",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false
         },
-        "adminID": {
-          "name": "adminID",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "isValid": {
-          "name": "isValid",
+        "isvalid": {
+          "name": "isvalid",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "createdat": {
+          "name": "createdat",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
@@ -188,12 +188,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "tickets_userID_student_id_fk": {
-          "name": "tickets_userID_student_id_fk",
+        "tickets_userid_student_id_fk": {
+          "name": "tickets_userid_student_id_fk",
           "tableFrom": "tickets",
           "tableTo": "student",
           "columnsFrom": [
-            "userID"
+            "userid"
           ],
           "columnsTo": [
             "id"
@@ -201,12 +201,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "tickets_adminID_admin_id_fk": {
-          "name": "tickets_adminID_admin_id_fk",
+        "tickets_adminid_admin_id_fk": {
+          "name": "tickets_adminid_admin_id_fk",
           "tableFrom": "tickets",
           "tableTo": "admin",
           "columnsFrom": [
-            "adminID"
+            "adminid"
           ],
           "columnsTo": [
             "id"
@@ -217,11 +217,11 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "tickets_userID_unique": {
-          "name": "tickets_userID_unique",
+        "tickets_userid_unique": {
+          "name": "tickets_userid_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "userID"
+            "userid"
           ]
         }
       },

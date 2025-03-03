@@ -24,14 +24,13 @@ export const adminTable = pgTable("admin", {
 export const ticketTable = pgTable("tickets", {
     id: varchar("id", {length: 100}).primaryKey(), //gen random uuid
     title: varchar("title", {length: 100}).notNull(),
-    descriptionID: varchar("descriptionID", {length: 100}).unique().notNull(),
-    userID: varchar("userID", {length: 100}).references(() => studentTable.id).notNull(),
-    adminID: varchar("adminID", {length: 100}).references(() => adminTable.id).notNull(),
-    isValid: boolean("isValid").notNull(),
-    createdAt: timestamp("createdAt").notNull()
+    userID: varchar("userid", {length: 100}).references(() => studentTable.id).unique().notNull(),
+    adminID: varchar("adminid", {length: 100}).references(() => adminTable.id),
+    isValid: boolean("isvalid"),
+    createdAt: varchar("createdat", {length: 100}).notNull()
 })
 export const descriptionsTable = pgTable("descriptions", {
-    id: varchar("id", {length: 100}).references(() => ticketTable.descriptionID).primaryKey(),
+    id: varchar("id", {length: 100}).references(() => ticketTable.id).primaryKey(),
     header: varchar("header", {length : 100}).notNull(),
     description: varchar("description", {length : 100}).notNull(),
     footer: varchar("footer", {length : 100}).notNull(),
