@@ -68,7 +68,7 @@ export default function HomePage() {
                         console.log(formatDate());
                         fetch("./api/ticket", {
                             method: "POST",
-                            headers: { "Content-Type": "application/json"},
+                            headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
                                 ticketID: ticket,
                                 title: eventT,
@@ -76,13 +76,38 @@ export default function HomePage() {
                                 createdAt: formattedDate,
                                 torf: true,
                             }),
-                        }).then((res)=> res.json()).then((genTick)=>{
-                            console.log("Ticket Gen response:", genTick);
-                            setLoading(false);
-                        }).catch((error)=>{
-                            console.error("Error in ticket generation:", error)
-                            setLoading(false);
                         })
+                            .then((res) => res.json())
+                            .then((genTick) => {
+                                console.log("Ticket Gen response:", genTick);
+                                setLoading(false);
+
+                                // Proceed to check ticket description regardless of whether ticket was newly created or already exists
+                                const desc = `${ticket} ${eventTitle}`.trim();
+                                return fetch("./api/ticket_desc", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        descid: desc,
+                                        hder: user.firstName,
+                                        descrip: eventT,
+                                        footer: user.lastName,
+                                    }),
+                                });
+                            })
+                            .then((res) => res.json())
+                            .then((descData) => {
+                                if (descData.exists) {
+                                    console.log("Description already exists");
+                                } else {
+                                    console.log("New description added:", descData);
+                                }
+                            })
+                            .catch((error) => {
+                                console.error("Error:", error);
+                                setLoading(false);
+                            });
+
                     }
                     else {
                         setStudentExists(false);
