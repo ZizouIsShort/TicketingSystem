@@ -7,10 +7,8 @@ const SimpleQRScanner: React.FC = () => {
     const qrScannerRef = useRef<QrScanner | null>(null);
 
     useEffect(() => {
-        // Cleanup function
         return () => {
             if (qrScannerRef.current) {
-                // Type guard to check if qrScannerRef.current is a QrScanner instance
                 if (qrScannerRef.current instanceof QrScanner) {
                     qrScannerRef.current.stop();
                     qrScannerRef.current.destroy();
@@ -30,9 +28,20 @@ const SimpleQRScanner: React.FC = () => {
                     console.log('Scanned result:', result.data);
                     setScanResult(result.data);
 
-                    // Safely stop the scanner
                     if (qrScannerRef.current instanceof QrScanner) {
                         qrScannerRef.current.stop();
+                        fetch("./api/isscan_ticket", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ scannedData: result.data }), // Send as an object
+                        })
+                            .then(response => response.json()) // Convert response to JSON
+                            .then(data => {
+                                console.log("Server response:", data); // Log response
+                            })
+                            .catch(error => {
+                                console.error("Error:", error); // Log any errors
+                            });
                     }
                 }
             },
