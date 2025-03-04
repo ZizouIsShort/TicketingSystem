@@ -6,6 +6,7 @@ import QrCode from "@/components/QrCode";
 import bcrypt from "bcryptjs";
 import {isThenable} from "next/dist/shared/lib/is-thenable";
 import {error} from "next/dist/build/output/log";
+import SimpleQRScanner from "@/components/scanner";
 
 export default function HomePage() {
     const { user, isSignedIn } = useUser();
@@ -82,8 +83,8 @@ export default function HomePage() {
                             console.error("Error in ticket generation:", error)
                             setLoading(false);
                         })
-
-                    } else {
+                    }
+                    else {
                         setStudentExists(false);
                     }
                     setLoading(false);
@@ -195,13 +196,17 @@ export default function HomePage() {
     }
 
     if (user?.publicMetadata?.role === "admin") {
-        return <p>Hello Admin</p>;
+        return (
+            <div>
+                <SimpleQRScanner></SimpleQRScanner>
+            </div>
+        );
     }
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
-            <h1 className="text-xl font-bold mb-4">Your Event Ticket</h1>
-            {ticketID ? <QrCode eventTitle={eventTitle} id={ticketID}/> : <p>Generating QR Code...</p>}
+            <h1 className="text-xl font-bold mb-4">Your {eventTitle} ticket</h1>
+            {ticketID ? <QrCode id={ticketID}/> : <p>Generating QR Code...</p>}
         </div>
     );
 }

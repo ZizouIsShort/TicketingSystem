@@ -2,7 +2,6 @@ import React from "react";
 import { QRCodeCanvas } from "qrcode.react";
 
 interface QrCodeProps {
-    eventTitle: string;
     id: string;
 }
 
