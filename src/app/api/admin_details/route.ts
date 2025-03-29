@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         );
 
         if (existingUser.length === 0) {
-            // if he doesnt exist we add him
+            // if he doesn't exist we add him
             await db.execute(
                 sql`INSERT INTO ${adminTable} (id, name) VALUES (${id}, ${name})`
             );

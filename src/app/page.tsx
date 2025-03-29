@@ -184,7 +184,7 @@ export default function HomePage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Failed to submit");
             window.location.reload();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error:", error);
             alert(error.message);
         }
