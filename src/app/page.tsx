@@ -235,8 +235,11 @@ export default function HomePage() {
 
     if (user?.publicMetadata?.role === "admin") {
         return (
-            <div>
-                <SimpleQRScanner></SimpleQRScanner>
+            <div className="relative min-h-screen w-full flex items-center justify-center">
+                <BackgroundBeams/>
+                <div className="relative z-10 flex flex-col items-center justify-center">
+                    <SimpleQRScanner/>
+                </div>
             </div>
         );
     }
