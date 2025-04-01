@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import {isThenable} from "next/dist/shared/lib/is-thenable";
 import {error} from "next/dist/build/output/log";
 import SimpleQRScanner from "@/components/scanner";
+import {BackgroundBeams} from "@/components/ui/background-beams";
 
 export default function HomePage() {
     const { user, isSignedIn } = useUser();
@@ -196,27 +197,39 @@ export default function HomePage() {
 
     if (studentExists === false) {
         return (
-            <>
-                <input
-                    className={'bg-black'}
-                    placeholder="Enter your college"
-                    value={cName}
-                    onChange={(e) => setCName(e.target.value)}
-                />
-                <input
-                    className={'bg-black'}
-                    placeholder="Enter your stream"
-                    value={cStream}
-                    onChange={(e) => setCStream(e.target.value)}
-                />
-                <input
-                    className={'bg-black'}
-                    placeholder="Enter your year"
-                    value={cYear}
-                    onChange={(e) => setCYear(e.target.value)}
-                />
-                <button onClick={studentDetails}>Submit</button>
-            </>
+            <div className="relative min-h-screen flex items-center justify-center">
+                {/* Background Beams component */}
+                <BackgroundBeams/>
+
+                {/* Form container */}
+                <div
+                    className={'relative z-10 bg-black bg-opacity-70 rounded-lg border border-gray-700 hover:shadow-[0_0_20px_rgba(255,255,255,0.7)] transition-shadow duration-300 flex flex-col mx-auto w-1/2 p-6 gap-4'}>
+                    <input
+                        className={'bg-black p-2 rounded border border-gray-700'}
+                        placeholder="Enter your college"
+                        value={cName}
+                        onChange={(e) => setCName(e.target.value)}
+                    />
+                    <input
+                        className={'bg-black p-2 rounded border border-gray-700'}
+                        placeholder="Enter your stream"
+                        value={cStream}
+                        onChange={(e) => setCStream(e.target.value)}
+                    />
+                    <input
+                        className={'bg-black p-2 rounded border border-gray-700'}
+                        placeholder="Enter your year"
+                        value={cYear}
+                        onChange={(e) => setCYear(e.target.value)}
+                    />
+                    <button
+                        className={'bg-white hover:bg-gray-700 text-black hover:text-white p-2 rounded'}
+                        onClick={studentDetails}
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
         );
     }
 
@@ -229,9 +242,18 @@ export default function HomePage() {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
-            <h1 className="text-xl font-bold mb-4">Your {eventTitle} ticket</h1>
-            {ticketID ? <QrCode id={ticketID}/> : <p>Generating QR Code...</p>}
+        <div className="relative flex flex-col items-center justify-center min-h-screen">
+            <BackgroundBeams/>
+            <div className="relative z-10 flex flex-col items-center justify-center">
+                <h1 className="text-xl font-bold mb-4 text-white">Your {eventTitle} ticket</h1>
+                {ticketID ? (
+                    <div className="bg-white p-4 rounded-lg shadow-lg">
+                        <QrCode id={ticketID}/>
+                    </div>
+                ) : (
+                    <p className="text-white">Generating QR Code...</p>
+                )}
+            </div>
         </div>
     );
 }
