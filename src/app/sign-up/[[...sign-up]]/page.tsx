@@ -1,5 +1,11 @@
-import { SignUp } from '@clerk/nextjs'
+import {SignUp} from '@clerk/nextjs'
+import {BackgroundBeams} from "@/components/ui/background-beams";
 
 export default function Page() {
-    return <SignUp/>
+    return (
+        <div className="relative min-h-screen flex items-center justify-center">
+            <BackgroundBeams/>
+            <SignUp/>
+        </div>
+    )
 }

@@ -198,10 +198,7 @@ export default function HomePage() {
     if (studentExists === false) {
         return (
             <div className="relative min-h-screen flex items-center justify-center">
-                {/* Background Beams component */}
                 <BackgroundBeams/>
-
-                {/* Form container */}
                 <div
                     className={'relative z-10 bg-black bg-opacity-70 rounded-lg border border-gray-700 hover:shadow-[0_0_20px_rgba(255,255,255,0.7)] transition-shadow duration-300 flex flex-col mx-auto w-1/2 p-6 gap-4'}>
                     <input
@@ -238,7 +235,7 @@ export default function HomePage() {
             <div className="relative min-h-screen w-full flex items-center justify-center">
                 <BackgroundBeams/>
                 <div className="relative z-10 flex flex-col items-center justify-center">
-                    <SimpleQRScanner/>
+                    <SimpleQRScanner adminId={user.id}/>
                 </div>
             </div>
         );

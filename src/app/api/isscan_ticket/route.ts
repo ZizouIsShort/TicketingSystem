@@ -5,7 +5,7 @@ import { ticketTable } from "@/db/schema";
 
 export async function POST(req: Request) {
     try {
-        const { scannedData } = await req.json();
+        const { scannedData, adminId } = await req.json();
 
         if (!scannedData) {
             return NextResponse.json({ error: "Missing scannedData" });
@@ -23,9 +23,10 @@ export async function POST(req: Request) {
 
             if (!isvalid) {
                 message = "Ticket has already been validated";
+                //Need help here
             } else {
                 await db.execute(
-                    sql`UPDATE ${ticketTable} SET isvalid = FALSE WHERE id = ${scannedData}`
+                    sql`UPDATE ${ticketTable} SET isvalid = FALSE, adminid = ${adminId} WHERE id = ${scannedData}`
                 );
                 message = "Ticket validated successfully";
             }
