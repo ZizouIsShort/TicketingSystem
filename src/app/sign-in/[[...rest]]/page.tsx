@@ -7,13 +7,14 @@ import { motion } from "framer-motion"
 
 export default function Page() {
     return (
-        <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black to-gray-900">
-            <BackgroundBeams className="opacity-40" /> {/* Increased opacity from 0.3 to 0.4 */}
+        <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black to-gray-900 overflow-hidden">
+            <BackgroundBeams className="opacity-40" />
+
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
-                className="relative z-10 p-6 sm:p-8 md:p-10 bg-black/60 backdrop-blur-xl rounded-2xl border border-teal-500/20 shadow-[0_0_30px_rgba(20,184,166,0.15)] max-w-md w-full"
+                className="relative z-10 p-6 sm:p-8 md:p-10 bg-black/70 backdrop-blur-2xl rounded-3xl border border-teal-500/20 shadow-[0_0_30px_rgba(20,184,166,0.15)] max-w-md w-full"
             >
                 <div className="mb-6 text-center">
                     <Ticket className="w-12 h-12 mx-auto mb-4 text-teal-400" />
@@ -23,9 +24,12 @@ export default function Page() {
 
                 <SignIn
                     appearance={{
+                        variables: {
+                            colorBackground: "transparent",
+                        },
                         elements: {
                             rootBox: "mx-auto",
-                            card: "bg-transparent shadow-none",
+                            card: "bg-transparent shadow-none mx-auto text-center",
                             headerTitle: "text-white text-xl font-bold",
                             headerSubtitle: "text-white/70",
                             formButtonPrimary:
@@ -33,7 +37,7 @@ export default function Page() {
                             formButtonReset: "text-teal-400 hover:text-teal-300",
                             formFieldLabel: "text-white/80",
                             formFieldInput:
-                                "bg-black/50 border-white/10 text-white rounded-xl focus:border-teal-400/50 focus:ring-2 focus:ring-teal-400/20 placeholder:text-white/40",
+                                "bg-black/50 border-white/10 text-white rounded-xl placeholder:text-white/40 focus:border-teal-400/50 focus:ring-2 focus:ring-teal-400/30 outline-none focus:outline-none focus-visible:outline-teal-500/40 focus-visible:outline focus-visible:outline-2 transition-all",
                             footerActionLink: "text-teal-400 hover:text-teal-300 font-medium",
                             identityPreviewEditButton: "text-teal-400 hover:text-teal-300",
                             formResendCodeLink: "text-teal-400 hover:text-teal-300",
@@ -54,6 +58,7 @@ export default function Page() {
                             userButtonPopoverActionButton: "hover:bg-black/10",
                             userButtonPopoverActionButtonText: "text-white",
                             userButtonPopoverActionButtonIcon: "text-white/70",
+                            footer: "bg-transparent text-white",
                         },
                     }}
                 />
