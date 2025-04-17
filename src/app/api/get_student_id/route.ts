@@ -22,8 +22,8 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ exists: true });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("API Error:", error);
-        return NextResponse.json({ error: error.message });
+        return NextResponse.json({ error: error });
     }
 }

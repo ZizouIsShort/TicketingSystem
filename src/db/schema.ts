@@ -1,6 +1,4 @@
-import {boolean, integer, pgTable, timestamp, uuid, varchar} from "drizzle-orm/pg-core";
-import { randomUUID } from "crypto";
-import {sql} from "drizzle-orm"
+import {boolean, integer, pgTable, varchar} from "drizzle-orm/pg-core";
 
 
 export const usersTable = pgTable("users", {
